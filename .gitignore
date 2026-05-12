@@ -1,0 +1,19 @@
+# OUTPUT DIRECTORY
+output/*
+
+
+#VSCODE
+.vscode/
+
+
+# LINUX TEMP FILE
+*.swp
+*.temp 
+
+#macOS
+.DS_Store
+
+#BACKUP FILES
+*~
+
+
