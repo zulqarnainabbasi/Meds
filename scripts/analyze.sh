@@ -168,10 +168,10 @@ RESULT=$(
 if [[ "$COMPARE_MODE" == true ]]; then
 
     echo
-    echo "--- Regression Analysis ---"
+    echo "-- Regression Analysis --"
 
-    OLD_FAILS=$(grep "TEST FAIL:" "$OLD_LOG" | awk '{print $5}')
-    NEW_FAILS=$(grep "TEST FAIL:" "$LOGFILE" | awk '{print $5}')
+    OLD_FAILS=$(grep "Test Fail:" "$OLD_LOG" | awk '{print $5}')
+    NEW_FAILS=$(grep "Test Fail:" "$LOGFILE" | awk '{print $5}')
 
     REGRESSION_FOUND=false
 
