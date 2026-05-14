@@ -131,7 +131,7 @@ Pass rate:   ${PASS_RATE}%
 
 --- Failed Tests ---
 
-echo "${FAILED_TESTS:-None}"
+${FAILED_TESTS:-None}
 
 --- Timing Statistics ---
 
@@ -166,17 +166,27 @@ RESULT=$(
 [[ -n "$OUTPUT" ]] && echo "$RESULT" > "$OUTPUT" || echo "$RESULT"
 
 if [[ "$COMPARE_MODE" == true ]]; then
+
     echo
     echo "--- Regression Analysis ---"
 
-    OLD_FAILS=$(grep "TEST FAIL:" "$OLD_LOG" | awk -F'TEST FAIL: ' '{print $2}' | awk '{print $1}')
-    NEW_FAILS=$(grep "TEST FAIL:" "$LOGFILE" | awk -F'TEST FAIL: ' '{print $2}' | awk '{print $1}')
+    OLD_FAILS=$(grep "TEST FAIL:" "$OLD_LOG" | awk '{print $5}')
+    NEW_FAILS=$(grep "TEST FAIL:" "$LOGFILE" | awk '{print $5}')
+
+    REGRESSION_FOUND=false
 
     for test in $NEW_FAILS; do
-        if ! echo "$OLD_FAILS" | grep -q "$test"; then
-            echo "New regression: $test"
+
+        if ! echo "$OLD_FAILS" | grep -q "^${test}$"; then
+            echo -e "${RED}NEW REGRESSION:${NC} $test"
+            REGRESSION_FOUND=true
         fi
+
     done
+
+    [[ "$REGRESSION_FOUND" == false ]] \
+        && echo -e "${GREEN}No new regressions detected.${NC}"
+
 fi
 
 exit $([[ $FAIL -eq 0 ]] && echo 0 || echo 1)
